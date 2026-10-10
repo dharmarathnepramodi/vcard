@@ -15,6 +15,11 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet" />
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="alternate icon" href="favicon.svg" />
+  <meta name="theme-color" content="#FFD500" />
+
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
@@ -35,7 +40,8 @@
         <div class="avatar-container">
           <div class="avatar-ring"></div>
           <div class="avatar-inner">
-            <img src="Profile.jpg" alt="Pramodi Dharmarathne" class="avatar-img" />
+            <img src="Profile.jpg" alt="Pramodi Dharmarathne" class="avatar-img" draggable="false" oncontextmenu="return false;" />
+            <div class="avatar-shield"></div>
           </div>
         </div>
 
@@ -200,17 +206,41 @@
     // Copy to clipboard feature
     const copyBtn = document.getElementById('copy-btn');
     const copyText = document.getElementById('copy-text');
-    copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        copyText.textContent = 'Link Copied to Clipboard!';
-        copyBtn.classList.add('copied');
-        setTimeout(() => {
-          copyText.textContent = 'Share This Landing Page';
-          copyBtn.classList.remove('copied');
-        }, 2200);
-      }).catch(() => {
-        copyText.textContent = 'Copied!';
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          copyText.textContent = 'Link Copied to Clipboard!';
+          copyBtn.classList.add('copied');
+          setTimeout(() => {
+            copyText.textContent = 'Share This Landing Page';
+            copyBtn.classList.remove('copied');
+          }, 2200);
+        }).catch(() => {
+          copyText.textContent = 'Copied!';
+        });
       });
+    }
+
+    // Protection: Disable right-click context menu across the page
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      return false;
+    });
+
+    // Protection: Prevent drag-and-drop of images (which allows saving/opening in new tab)
+    document.addEventListener('dragstart', (e) => {
+      if (e.target.nodeName === 'IMG') {
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    // Protection: Prevent common save keyboard shortcuts (Ctrl+S, Ctrl+U)
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
+        e.preventDefault();
+        return false;
+      }
     });
   </script>
 </body>
